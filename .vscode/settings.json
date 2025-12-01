@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "/workspaces/AoC-Cpp-Template",
+    "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.ignoreCMakeListsMissing": true,
     "files.associations": {
         "iostream": "cpp",
