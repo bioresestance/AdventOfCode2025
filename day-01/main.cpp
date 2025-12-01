@@ -6,12 +6,23 @@
 #include "InputFile.hpp"
 #include "src/include.hpp"
 
-// Add the test input and output strings here to validate the solution
-const std::string_view testInputPart1String = "Add your input string here";
-const std::string_view testOutputPart1String = "Add your output string here";
+// Example taken from the puzzle description
+const std::string_view exampleInputString = R"(L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82)";
+const std::string_view testOutputPart1String = "3";
+const std::string_view testOutputPart2String = "6";
 
-const std::string_view testInputPart2String = "Add your input string here";
-const std::string_view testOutputPart2String = "Add your output string here";
+// Placeholder for the real puzzle answers; update as parts are solved
+const std::string_view puzzleOutputPart1String = "1052";
+const std::string_view puzzleOutputPart2String = "6295";
 
 class Day1Tests : public ::testing::Test
 {
@@ -41,18 +52,35 @@ protected:
 
 
 
+TEST(Day1Examples, SamplePart1)
+{
+    EXPECT_EQ(handlePart1(exampleInputString), std::string(testOutputPart1String));
+}
+
+TEST(Day1Examples, SamplePart2)
+{
+    EXPECT_EQ(handlePart2(exampleInputString), std::string(testOutputPart2String));
+}
+
+
 TEST_F(Day1Tests, TestPart1)
 {
-    uint32_t resInt = std::stoi(testOutputPart1String.data());
-    std::string result = handlePart1(inputFile.getText());
-    uint32_t resultInt = std::stoi(result);
-    ASSERT_EQ(resultInt, resInt);
+    const auto result = handlePart1(inputFile.getText());
+    const std::string expected{puzzleOutputPart1String};
+    EXPECT_EQ(result, expected);
+    if (result == expected)
+    {
+        std::cout << "Day 01 - Part 1 answer: " << result << '\n';
+    }
 }
 
 TEST_F(Day1Tests, TestPart2)
 {
-    uint32_t resInt = std::stoi(testOutputPart1String.data());
-    std::string result = handlePart2(inputFile.getText());
-    uint32_t resultInt = std::stoi(result);
-    ASSERT_EQ(resultInt, resInt);
+    const auto result = handlePart2(inputFile.getText());
+    const std::string expected{puzzleOutputPart2String};
+    EXPECT_EQ(result, expected);
+    if (result == expected)
+    {
+        std::cout << "Day 01 - Part 2 answer: " << result << '\n';
+    }
 }

@@ -4,6 +4,8 @@ project(AoC2025 VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_testing()
+
 # Download and install GoogleTest
 include(FetchContent)
 FetchContent_Declare(

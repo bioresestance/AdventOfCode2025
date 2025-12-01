@@ -29,9 +29,14 @@ std::vector<std::string> &InputFile::getLines()
 std::string InputFile::getText()
 {
     std::string text;
-    for (const auto &line : _lines)
+    text.reserve(_lines.size() * 8); // heuristic reserve to reduce reallocations
+    for (std::size_t i = 0; i < _lines.size(); ++i)
     {
-        text += line;
+        text += _lines[i];
+        if (i + 1 < _lines.size())
+        {
+            text.push_back('\n');
+        }
     }
 
     return text;
