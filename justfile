@@ -9,7 +9,7 @@ build day:
 
 test day:
     @echo "Running tests for day {{day}}..."
-    cmake --build build --target TestDay-{{day}} && ctest --test-dir build --output-on-failure -R Day{{day}}Tests
+    ctest --test-dir build --output-on-failure -R day-{{day}}
 
 clean:
     @echo "Cleaning build directory..."
