@@ -35,7 +35,7 @@ static std::string getInputFilePath()
 }
 
 #if ENABLE_PART1
-TEST(Day{{day}}Tests, TestPart1)
+TEST(Day2Tests, TestPart1)
 {
     auto result = handlePart1(testInputStrings);
     std::cout << "Part 1 - Test Result: " << result << std::endl;
@@ -44,7 +44,7 @@ TEST(Day{{day}}Tests, TestPart1)
 #endif
 
 #if ENABLE_PART2
-TEST(Day{{day}}Tests, TestPart2)
+TEST(Day2Tests, TestPart2)
 {
     auto result = handlePart2(testInputStrings);
     std::cout << "Part 2 - Test Result: " << result << std::endl;
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
         InputFile inputFile = InputFile(getInputFilePath());
         std::cout << "--------------------------------------------------------------------------------------------------------" << std::endl;
         #if ENABLE_PART1
-        std::cout << "Day {{day}}, running solution:" << std::endl;
+        std::cout << "Day 2, running solution:" << std::endl;
         auto startPart1 = std::chrono::high_resolution_clock::now();
         auto part1Result = handlePart1(inputFile.getLines());
         auto endPart1 = std::chrono::high_resolution_clock::now();
