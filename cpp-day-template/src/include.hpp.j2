@@ -3,9 +3,8 @@
 */
 #pragma once
 
-#include <string_view>
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
+#include "Utils.hpp"
 
-std::string handlePart1(const std::string_view input);
-std::string handlePart2(const std::string_view input);
+int64_t handlePart1(const std::vector<std::string> &inputLines);
+int64_t handlePart2(const std::vector<std::string> &inputLines);
