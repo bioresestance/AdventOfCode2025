@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 namespace day01::detail
 {
@@ -35,6 +36,36 @@ namespace day01::detail
     }
 
     template <typename Fn>
+    void parseLine(std::string_view line, Fn &&fn)
+    {
+        line = trim(line);
+        if (line.empty())
+        {
+            return;
+        }
+
+        const char direction = line.front();
+        if (direction != 'L' && direction != 'R')
+        {
+            throw std::runtime_error("Unexpected rotation direction");
+        }
+
+        line.remove_prefix(1);
+        line = trim(line);
+
+        int distance = 0;
+        const char *const begin = line.data();
+        const char *const end = begin + line.size();
+        const auto [ptr, err] = std::from_chars(begin, end, distance);
+        if (err != std::errc{} || ptr != end)
+        {
+            throw std::runtime_error("Invalid rotation distance in input");
+        }
+
+        fn(direction, distance);
+    }
+
+    template <typename Fn>
     void forEachInstruction(std::string_view input, Fn &&fn)
     {
         std::string_view remaining = input;
@@ -43,32 +74,16 @@ namespace day01::detail
             const auto newlineIdx = remaining.find('\n');
             std::string_view line = newlineIdx == std::string_view::npos ? remaining : remaining.substr(0, newlineIdx);
             remaining = newlineIdx == std::string_view::npos ? std::string_view{} : remaining.substr(newlineIdx + 1);
+            parseLine(line, fn);
+        }
+    }
 
-            line = trim(line);
-            if (line.empty())
-            {
-                continue;
-            }
-
-            const char direction = line.front();
-            if (direction != 'L' && direction != 'R')
-            {
-                throw std::runtime_error("Unexpected rotation direction");
-            }
-
-            line.remove_prefix(1);
-            line = trim(line);
-
-            int distance = 0;
-            const char *const begin = line.data();
-            const char *const end = begin + line.size();
-            const auto [ptr, err] = std::from_chars(begin, end, distance);
-            if (err != std::errc{} || ptr != end)
-            {
-                throw std::runtime_error("Invalid rotation distance in input");
-            }
-
-            fn(direction, distance);
+    template <typename Range, typename Fn>
+    void forEachInstruction(const Range &lines, Fn &&fn)
+    {
+        for (const auto &line : lines)
+        {
+            parseLine(std::string_view(line), fn);
         }
     }
 

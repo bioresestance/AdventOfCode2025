@@ -8,7 +8,7 @@
 
 namespace detail = day01::detail;
 
-std::string handlePart1(const std::string_view input)
+int64_t handlePart1(const std::vector<std::string> &input)
 {
     int position = 50;
     std::uint64_t zeroHits = 0;
@@ -21,5 +21,5 @@ std::string handlePart1(const std::string_view input)
         }
     });
 
-    return std::to_string(zeroHits);
+    return static_cast<int64_t>(zeroHits);
 }

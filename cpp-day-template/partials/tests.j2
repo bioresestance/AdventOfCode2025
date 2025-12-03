@@ -1,49 +1,42 @@
-#include <gtest/gtest.h>
-
-#include <string_view>
-
-#include "Runner.hpp"
-#include "TestHarness.hpp"
-#include "src/include.hpp"
-
-namespace
-{
-constexpr std::string_view kDayId = "02";
-constexpr std::string_view kSourcePath = __FILE__;
-
+namespace {
 void runSampleSuite(common::tests::Part part)
 {
     const auto &cases = common::tests::cases(part);
     if (cases.empty())
     {
-        GTEST_SKIP() << "No sample cases provided.";
+        GTEST_SKIP() << "No sample cases provided for this part yet.";
     }
 
     for (const auto &testCase : cases)
     {
         if (part == common::tests::Part::One)
         {
+            if (testCase.expected.empty())
+            {
+                handlePart1(testCase.input);
+                continue;
+            }
             common::tests::expect_part(testCase, handlePart1);
         }
         else
         {
+            if (testCase.expected.empty())
+            {
+                handlePart2(testCase.input);
+                continue;
+            }
             common::tests::expect_part(testCase, handlePart2);
         }
     }
 }
 } // namespace
 
-TEST(Day02Part1Samples, ValidateExamples)
+TEST(Day{{day}}Part1Samples, ValidateExamples)
 {
     runSampleSuite(common::tests::Part::One);
 }
 
-TEST(Day02Part2Samples, ValidateExamples)
+TEST(Day{{day}}Part2Samples, ValidateExamples)
 {
     runSampleSuite(common::tests::Part::Two);
-}
-
-int main(int argc, char **argv)
-{
-    return common::runDay(argc, argv, kDayId, kSourcePath, handlePart1, handlePart2);
 }

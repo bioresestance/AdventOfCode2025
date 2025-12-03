@@ -8,7 +8,7 @@
 
 namespace detail = day01::detail;
 
-std::string handlePart2(const std::string_view input)
+int64_t handlePart2(const std::vector<std::string> &input)
 {
     int position = 50;
     std::uint64_t zeroHits = 0;
@@ -18,5 +18,5 @@ std::string handlePart2(const std::string_view input)
         position = detail::applyRotation(position, direction, distance);
     });
 
-    return std::to_string(zeroHits);
+    return static_cast<int64_t>(zeroHits);
 }

@@ -1,5 +1,5 @@
 add_executable(day-2 main.cpp)
-target_link_libraries(day-2 GTest::gtest_main Common)
+target_link_libraries(day-2 GTest::gtest Common)
 
 file(GLOB SOURCES "src/*.cpp")
 target_sources(day-2 PRIVATE ${SOURCES})

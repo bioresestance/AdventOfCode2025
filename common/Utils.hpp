@@ -1,132 +1,35 @@
 #pragma once
 
-#include <bits/stdc++.h>
+#include <string_view>
+#include <vector>
 
-inline std::vector<std::string> splitString(const std::string_view input, const char delimiter)
+#include "Grid.hpp"
+#include "MathUtils.hpp"
+#include "Search.hpp"
+#include "StringUtils.hpp"
+
+inline std::vector<std::string> splitString(std::string_view input, const char delimiter)
 {
-    std::vector<std::string> result;
-    for (const auto line : input | std::views::split(delimiter))
-    {
-        result.emplace_back(line.begin(), line.end());
-    }
-    return result;
+    return common::str::split(input, delimiter);
 }
 
-struct Coordinate
-{
-    int64_t x, y;
-
-    Coordinate operator+(const Coordinate &other) const
-    {
-        Coordinate res;
-        res.x = x + other.x;
-        res.y = y + other.y;
-        return res;
-    }
-
-    Coordinate operator+(Coordinate &other) const
-    {
-        Coordinate res;
-        res.x = x + other.x;
-        res.y = y + other.y;
-        return res;
-    }
-    Coordinate operator-(const Coordinate &other) const
-    {
-        Coordinate res;
-        res.x = x - other.x;
-        res.y = y - other.y;
-        return res;
-    }
-
-    Coordinate operator-(Coordinate &other) const
-    {
-        Coordinate res;
-        res.x = x - other.x;
-        res.y = y - other.y;
-        return res;
-    }
-
-    bool operator==(const Coordinate &other) const
-    {
-        return x == other.x && y == other.y;
-    }
-
-    bool operator<(const Coordinate &other) const
-    {
-        return x < other.x && y < other.y;
-    }
-
-    bool operator>(const Coordinate &other) const
-    {
-        return x > other.x && y > other.y;
-    }
-    bool operator<(Coordinate &other) const
-    {
-        return x < other.x && y < other.y;
-    }
-
-    bool operator>(Coordinate &other) const
-    {
-        return x > other.x && y > other.y;
-    }
-
-    bool operator<=(const Coordinate &other) const
-    {
-        return x <= other.x && y <= other.y;
-    }
-
-    bool operator>=(const Coordinate &other) const
-    {
-        return x >= other.x && y >= other.y;
-    }
-
-    bool operator<=(Coordinate &other) const
-    {
-        return x <= other.x && y <= other.y;
-    }
-
-    bool operator>=(Coordinate &other) const
-    {
-        return x >= other.x && y >= other.y;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Coordinate &coord)
-    {
-        os << "(" << coord.x << ", " << coord.y << ")";
-        return os;
-    }
-
-    static const Coordinate NORTH;
-    static const Coordinate SOUTH;
-    static const Coordinate EAST;
-    static const Coordinate WEST;
-    static const Coordinate NORTH_EAST;
-    static const Coordinate NORTH_WEST;
-    static const Coordinate SOUTH_EAST;
-    static const Coordinate SOUTH_WEST;
-};
-
-namespace std
-{
-    template <>
-    struct hash<Coordinate>
-    {
-        std::size_t operator()(const Coordinate &coord) const
-        {
-            return std::hash<int64_t>()(coord.x) ^ (std::hash<int64_t>()(coord.y) << 1);
-        }
-    };
-}
+using Coordinate = common::grid::Coordinate;
+using common::grid::NORTH;
+using common::grid::SOUTH;
+using common::grid::EAST;
+using common::grid::WEST;
+using common::grid::NORTH_EAST;
+using common::grid::NORTH_WEST;
+using common::grid::SOUTH_EAST;
+using common::grid::SOUTH_WEST;
 
 template <typename T>
-static bool inBoundary(std::vector<std::vector<T>> &map, Coordinate coord)
+inline bool inBoundary(std::vector<std::vector<T>> &map, Coordinate coord)
 {
-    return coord.x >= 0 && coord.x < map[0].size() && coord.y >= 0 && coord.y < map.size();
+    return common::grid::inBounds(coord, map[0].size(), map.size());
 }
 
-static constexpr inline bool inBoundary(Coordinate node, uint32_t map_width, uint32_t map_height)
+inline bool inBoundary(Coordinate node, uint32_t map_width, uint32_t map_height)
 {
-    return node.x >= 0 && node.x < map_width &&
-           node.y >= 0 && node.y < map_height;
+    return common::grid::inBounds(node, map_width, map_height);
 }

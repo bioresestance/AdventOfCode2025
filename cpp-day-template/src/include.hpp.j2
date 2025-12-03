@@ -3,7 +3,11 @@
 */
 #pragma once
 
-#include <bits/stdc++.h>
+#include <cstdint>
+#include <string>
+#include <string_view>
+#include <vector>
+
 #include "Utils.hpp"
 
 int64_t handlePart1(const std::vector<std::string> &inputLines);
