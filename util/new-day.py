@@ -19,6 +19,7 @@ def create_new_day(day):
     # Define paths
     template_folder = 'cpp-day-template'
     new_day_folder = f'day-{day:02d}'
+    skip_dirs = {"partials"}
 
     # Create new day folder
     if not os.path.exists(new_day_folder):
@@ -29,9 +30,10 @@ def create_new_day(day):
 
     # Process files and directories in the template folder
     for root, dirs, files in os.walk(template_folder):
+        dirs[:] = [d for d in dirs if d not in skip_dirs]
         # Compute the relative path from the template folder
         relative_path = os.path.relpath(root, template_folder)
-        target_dir = os.path.join(new_day_folder, relative_path)
+        target_dir = os.path.join(new_day_folder, relative_path) if relative_path != '.' else new_day_folder
 
         # Create directories in the target location
         if not os.path.exists(target_dir):
