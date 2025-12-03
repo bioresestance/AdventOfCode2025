@@ -7,7 +7,8 @@
 
 using namespace std::ranges;
 
-int64_t handlePart1(const std::vector<std::string> &inputLines) {
+int64_t handlePart1(const InputFile &input) {
+    const auto &inputLines = input.getLines();
 
     // Should only have a single line 
     if( inputLines.size() != 1)

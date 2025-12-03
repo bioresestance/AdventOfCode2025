@@ -42,8 +42,8 @@ int runDayWithAdapters(int argc,
                        char **argv,
                        std::string_view dayId,
                        std::string_view sourcePath,
-                       std::function<std::string(const std::vector<std::string> &)> part1,
-                       std::function<std::string(const std::vector<std::string> &)> part2)
+                       std::function<std::string(const InputFile &)> part1,
+                       std::function<std::string(const InputFile &)> part2)
 {
     RunOptions options = buildRunOptions(dayId, sourcePath, argc, argv);
     tests::setTestsRoot(options.testsPath);
@@ -56,7 +56,6 @@ int runDayWithAdapters(int argc,
     }
 
     InputFile input(options.inputPath.string());
-    const auto &lines = input.getLines();
 
     if (!options.runPart1 && !options.runPart2)
     {
@@ -67,7 +66,7 @@ int runDayWithAdapters(int argc,
     if (options.runPart1)
     {
         const auto start = Clock::now();
-        const auto result = part1(lines);
+        const auto result = part1(input);
         const auto end = Clock::now();
         const std::chrono::duration<double> elapsed = end - start;
         printResult("Part 1", result, elapsed.count(), options.colorOutput);
@@ -76,7 +75,7 @@ int runDayWithAdapters(int argc,
     if (options.runPart2)
     {
         const auto start = Clock::now();
-        const auto result = part2(lines);
+        const auto result = part2(input);
         const auto end = Clock::now();
         const std::chrono::duration<double> elapsed = end - start;
         printResult("Part 2", result, elapsed.count(), options.colorOutput);

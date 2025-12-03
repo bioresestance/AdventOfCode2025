@@ -8,12 +8,12 @@
 
 namespace detail = day01::detail;
 
-int64_t handlePart2(const std::vector<std::string> &input)
+int64_t handlePart2(const InputFile &input)
 {
     int position = 50;
     std::uint64_t zeroHits = 0;
 
-    detail::forEachInstruction(input, [&](char direction, int distance) {
+    detail::forEachInstruction(input.getLines(), [&](char direction, int distance) {
         zeroHits += detail::countZeroClicks(position, direction, distance);
         position = detail::applyRotation(position, direction, distance);
     });

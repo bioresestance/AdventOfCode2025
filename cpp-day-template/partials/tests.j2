@@ -13,7 +13,8 @@ void runSampleSuite(common::tests::Part part)
         {
             if (testCase.expected.empty())
             {
-                handlePart1(testCase.input);
+                auto inputFile = common::tests::makeInput(testCase);
+                handlePart1(inputFile);
                 continue;
             }
             common::tests::expect_part(testCase, handlePart1);
@@ -22,7 +23,8 @@ void runSampleSuite(common::tests::Part part)
         {
             if (testCase.expected.empty())
             {
-                handlePart2(testCase.input);
+                auto inputFile = common::tests::makeInput(testCase);
+                handlePart2(inputFile);
                 continue;
             }
             common::tests::expect_part(testCase, handlePart2);

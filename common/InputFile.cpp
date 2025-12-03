@@ -3,25 +3,26 @@
 #include <charconv>
 #include <stdexcept>
 
-InputFile::InputFile(std::string filename) : _filename(filename)
+InputFile::InputFile(std::string filename) : _filename(std::move(filename))
 {
-    // Open the file
-    _file.open(filename);
-    if (!_file.is_open())
+    std::ifstream file(_filename);
+    if (!file.is_open())
     {
-        std::cout << "Could not open file: " << filename << std::endl;
+        std::cout << "Could not open file: " << _filename << std::endl;
         return;
     }
 
     // Rad in all the lines and store them in the vector
     std::string line;
-    while (std::getline(_file, line))
+    while (std::getline(file, line))
     {
         _lines.push_back(line);
     }
+}
 
-    // Close the file
-    _file.close();
+InputFile::InputFile(std::string filename, std::vector<std::string> lines)
+    : _filename(std::move(filename)), _lines(std::move(lines))
+{
 }
 
 std::vector<std::string> &InputFile::getLines()
@@ -91,4 +92,9 @@ const std::vector<std::vector<char>> &InputFile::asGrid() const
         }
     }
     return *_grid;
+}
+
+InputFile InputFile::fromLines(std::vector<std::string> lines, std::string filename)
+{
+    return InputFile(std::move(filename), std::move(lines));
 }

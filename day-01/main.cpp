@@ -25,11 +25,23 @@ void runSampleSuite(common::tests::Part part)
     {
         if (part == common::tests::Part::One)
         {
-            common::tests::expect_part(testCase, handlePart1);
+                if (testCase.expected.empty())
+                {
+                    auto inputFile = common::tests::makeInput(testCase);
+                    handlePart1(inputFile);
+                    continue;
+                }
+                common::tests::expect_part(testCase, handlePart1);
         }
         else
         {
-            common::tests::expect_part(testCase, handlePart2);
+                if (testCase.expected.empty())
+                {
+                    auto inputFile = common::tests::makeInput(testCase);
+                    handlePart2(inputFile);
+                    continue;
+                }
+                common::tests::expect_part(testCase, handlePart2);
         }
     }
 }
@@ -54,13 +66,13 @@ TEST(Day01Part2Samples, ValidateExamples)
 TEST(Day01Puzzle, Part1Answer)
 {
     auto input = loadPuzzleInput();
-    EXPECT_EQ(handlePart1(input.getLines()), 1052);
+    EXPECT_EQ(handlePart1(input), 1052);
 }
 
 TEST(Day01Puzzle, Part2Answer)
 {
     auto input = loadPuzzleInput();
-    EXPECT_EQ(handlePart2(input.getLines()), 6295);
+    EXPECT_EQ(handlePart2(input), 6295);
 }
 
 int main(int argc, char **argv)

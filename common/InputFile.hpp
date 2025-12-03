@@ -1,9 +1,12 @@
+#pragma once
+
 #include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 class InputFile
@@ -18,6 +21,11 @@ public:
      * @param filename Filename to read
      */
     InputFile(std::string filename = "./input.txt");
+
+    /**
+     * @brief Construct an InputFile directly from in-memory lines.
+     */
+    InputFile(std::string filename, std::vector<std::string> lines);
     ~InputFile() = default;
 
     /**
@@ -48,13 +56,14 @@ public:
     iterator begin() const noexcept { return _lines.begin(); }
     iterator end() const noexcept { return _lines.end(); }
 
+    static InputFile fromLines(std::vector<std::string> lines,
+                               std::string filename = "<memory>");
+
 private:
     /// @brief Filename to read
     std::string _filename;
     /// @brief Vector of lines from the file
     std::vector<std::string> _lines;
-    /// @brief File stream
-    std::ifstream _file;
     /// @brief Cached blob of the entire file
     mutable std::optional<std::string> _text;
     /// @brief Cached integer representation of every non-empty line

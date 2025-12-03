@@ -166,4 +166,9 @@ std::filesystem::path resolveCasePath(const std::filesystem::path &root,
     return path;
 }
 
+InputFile makeInput(const PartTestCase &testCase)
+{
+    return InputFile::fromLines(testCase.input, testCase.name);
+}
+
 } // namespace common::tests

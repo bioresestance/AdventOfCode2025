@@ -23,10 +23,22 @@ void runSampleSuite(common::tests::Part part)
     {
         if (part == common::tests::Part::One)
         {
+            if (testCase.expected.empty())
+            {
+                auto inputFile = common::tests::makeInput(testCase);
+                handlePart1(inputFile);
+                continue;
+            }
             common::tests::expect_part(testCase, handlePart1);
         }
         else
         {
+            if (testCase.expected.empty())
+            {
+                auto inputFile = common::tests::makeInput(testCase);
+                handlePart2(inputFile);
+                continue;
+            }
             common::tests::expect_part(testCase, handlePart2);
         }
     }
