@@ -1,8 +1,12 @@
 #pragma once
 
 #include <cstdint>
+#include <iterator>
 #include <numeric>
+#include <stdexcept>
 #include <type_traits>
+#include <utility>
+#include <vector>
 
 namespace common::math
 {
@@ -48,6 +52,101 @@ Base pow_mod(Base base, Exponent exp, Mod mod)
         }
         exp >>= 1;
         base = (base * base) % mod;
+    }
+    return result;
+}
+
+template <typename T>
+struct Extremum
+{
+    T value{};
+    std::size_t index = 0;
+};
+
+template <typename T>
+Extremum<T> min(const std::vector<T> &values)
+{
+    if (values.empty())
+    {
+        throw std::runtime_error("min_with_index requires non-empty input");
+    }
+
+    Extremum<T> result{values.front(), 0};
+    for (std::size_t i = 1; i < values.size(); ++i)
+    {
+        const T &v = values[i];
+        if (v < result.value)
+        {
+            result.value = v;
+            result.index = i;
+        }
+    }
+    return result;
+}
+
+template <typename T>
+Extremum<T> max(const std::vector<T> &values)
+{
+    if (values.empty())
+    {
+        throw std::runtime_error("max_with_index requires non-empty input");
+    }
+
+    Extremum<T> result{values.front(), 0};
+    for (std::size_t i = 1; i < values.size(); ++i)
+    {
+        const T &v = values[i];
+        if (v > result.value)
+        {
+            result.value = v;
+            result.index = i;
+        }
+    }
+    return result;
+}
+
+template <typename Iterator>
+Extremum<typename std::iterator_traits<Iterator>::value_type>
+min(Iterator begin, Iterator end)
+{
+    using T = typename std::iterator_traits<Iterator>::value_type;
+    if (begin == end)
+    {
+        throw std::runtime_error("min_with_index requires non-empty range");
+    }
+
+    Extremum<T> result{*begin, 0};
+    std::size_t idx = 0;
+    for (Iterator it = begin; it != end; ++it, ++idx)
+    {
+        if (*it < result.value)
+        {
+            result.value = *it;
+            result.index = idx;
+        }
+    }
+    return result;
+}
+
+template <typename Iterator>
+Extremum<typename std::iterator_traits<Iterator>::value_type>
+max(Iterator begin, Iterator end)
+{
+    using T = typename std::iterator_traits<Iterator>::value_type;
+    if (begin == end)
+    {
+        throw std::runtime_error("max_with_index requires non-empty range");
+    }
+
+    Extremum<T> result{*begin, 0};
+    std::size_t idx = 0;
+    for (Iterator it = begin; it != end; ++it, ++idx)
+    {
+        if (*it > result.value)
+        {
+            result.value = *it;
+            result.index = idx;
+        }
     }
     return result;
 }

@@ -101,4 +101,46 @@ std::vector<T> to_numbers(const Range &range)
     return numbers;
 }
 
+template <typename T = int64_t>
+std::vector<T> to_vector_of_numbers(std::string_view input, std::optional<char> delimiter = std::nullopt)
+{
+    if (delimiter.has_value())
+    {
+        auto tokens = split(input, *delimiter, true);
+        std::vector<std::string> cleaned;
+        cleaned.reserve(tokens.size());
+        for (auto &token : tokens)
+        {
+            auto trimmed = trim_copy(token);
+            if (trimmed.empty())
+            {
+                continue;
+            }
+            cleaned.push_back(std::move(trimmed));
+        }
+        return to_numbers<T>(cleaned);
+    }
+
+    std::vector<T> numbers;
+    numbers.reserve(input.size());
+    for (char ch : input)
+    {
+        if (std::isspace(static_cast<unsigned char>(ch)))
+        {
+            continue;
+        }
+
+        char buffer[1] = {ch};
+        T value{};
+        const auto [ptr, ec] = std::from_chars(std::begin(buffer), std::end(buffer), value);
+        if (ec != std::errc{} || ptr != std::end(buffer))
+        {
+            throw std::runtime_error("Failed to convert character to number");
+        }
+        numbers.push_back(value);
+    }
+    return numbers;
+}
+
+
 } // namespace common::str
