@@ -15,6 +15,9 @@ namespace
 std::filesystem::path g_testsRoot;
 std::mutex g_cacheMutex;
 std::optional<DayTestSuite> g_cachedSuite;
+bool g_part1Enabled = true;
+bool g_part2Enabled = true;
+const std::vector<PartTestCase> g_disabledCases;
 
 std::string_view partFolder(Part part)
 {
@@ -83,6 +86,17 @@ const std::filesystem::path &getTestsRoot()
     return g_testsRoot;
 }
 
+void setEnabledParts(bool part1Enabled, bool part2Enabled)
+{
+    g_part1Enabled = part1Enabled;
+    g_part2Enabled = part2Enabled;
+}
+
+bool isPartEnabled(Part which)
+{
+    return which == Part::One ? g_part1Enabled : g_part2Enabled;
+}
+
 const DayTestSuite &currentSuite()
 {
     {
@@ -106,6 +120,10 @@ const DayTestSuite &currentSuite()
 
 const std::vector<PartTestCase> &cases(Part which)
 {
+    if (!isPartEnabled(which))
+    {
+        return g_disabledCases;
+    }
     const auto &suite = currentSuite();
     return which == Part::One ? suite.part1 : suite.part2;
 }

@@ -35,6 +35,8 @@ struct DayTestSuite
 
 void setTestsRoot(std::filesystem::path root);
 const std::filesystem::path &getTestsRoot();
+void setEnabledParts(bool part1Enabled, bool part2Enabled);
+bool isPartEnabled(Part which);
 
 const DayTestSuite &currentSuite();
 const std::vector<PartTestCase> &cases(Part which);

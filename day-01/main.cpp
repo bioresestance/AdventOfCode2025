@@ -15,6 +15,10 @@ constexpr std::string_view kSourcePath = __FILE__;
 
 void runSampleSuite(common::tests::Part part)
 {
+    if (!common::tests::isPartEnabled(part))
+    {
+        GTEST_SKIP() << "Part disabled by CLI flags.";
+    }
     const auto &cases = common::tests::cases(part);
     if (cases.empty())
     {
@@ -65,12 +69,20 @@ TEST(Day01Part2Samples, ValidateExamples)
 
 TEST(Day01Puzzle, Part1Answer)
 {
+    if (!common::tests::isPartEnabled(common::tests::Part::One))
+    {
+        GTEST_SKIP() << "Part disabled by CLI flags.";
+    }
     auto input = loadPuzzleInput();
     EXPECT_EQ(handlePart1(input), 1052);
 }
 
 TEST(Day01Puzzle, Part2Answer)
 {
+    if (!common::tests::isPartEnabled(common::tests::Part::Two))
+    {
+        GTEST_SKIP() << "Part disabled by CLI flags.";
+    }
     auto input = loadPuzzleInput();
     EXPECT_EQ(handlePart2(input), 6295);
 }

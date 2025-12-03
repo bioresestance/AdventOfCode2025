@@ -46,7 +46,8 @@ bool parseBoolEnv(const char *value, bool defaultValue)
 
 bool isCustomFlag(std::string_view arg)
 {
-    return arg.starts_with("--input=") || arg.starts_with("--test-dir=") ||
+    return arg.starts_with("--input=") || arg == "--input" ||
+           arg.starts_with("--test-dir=") || arg == "--test-dir" ||
            arg == "--skip-part1" || arg == "--skip-part2" ||
            arg == "--only-part1" || arg == "--only-part2" ||
            arg == "--no-color" || arg == "--color";
@@ -169,9 +170,33 @@ RunOptions buildRunOptions(std::string_view dayId,
         {
             options.inputPath = arg.substr(std::string_view("--input=").size());
         }
+        else if (arg == "--input")
+        {
+            if (i + 1 < argc)
+            {
+                consumedArgs.push_back(i + 1);
+                options.inputPath = argv[++i];
+            }
+            else
+            {
+                std::cerr << "Missing value for --input flag" << std::endl;
+            }
+        }
         else if (arg.starts_with("--test-dir="))
         {
             options.testsPath = arg.substr(std::string_view("--test-dir=").size());
+        }
+        else if (arg == "--test-dir")
+        {
+            if (i + 1 < argc)
+            {
+                consumedArgs.push_back(i + 1);
+                options.testsPath = argv[++i];
+            }
+            else
+            {
+                std::cerr << "Missing value for --test-dir flag" << std::endl;
+            }
         }
         else if (arg == "--skip-part1")
         {

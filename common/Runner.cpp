@@ -47,9 +47,17 @@ int runDayWithAdapters(int argc,
 {
     RunOptions options = buildRunOptions(dayId, sourcePath, argc, argv);
     tests::setTestsRoot(options.testsPath);
+    tests::setEnabledParts(options.runPart1, options.runPart2);
 
     ::testing::InitGoogleTest(&argc, argv);
+    const bool listingTests = ::testing::GTEST_FLAG(list_tests);
     const int testResult = RUN_ALL_TESTS();
+    if (listingTests)
+    {
+        // CTest invokes gtest binaries with --gtest_list_tests during discovery;
+        // bail out early so the actual puzzle execution does not run at build time.
+        return testResult;
+    }
     if (testResult != 0)
     {
         return testResult;
