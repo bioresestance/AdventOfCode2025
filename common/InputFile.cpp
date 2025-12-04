@@ -80,15 +80,19 @@ const std::vector<int64_t> &InputFile::asIntegers() const
     return *_integers;
 }
 
-const std::vector<std::vector<char>> &InputFile::asGrid() const
+const common::grid::Grid<char> &InputFile::asGrid() const
 {
     if (!_grid.has_value())
     {
-        _grid.emplace();
-        _grid->reserve(_lines.size());
-        for (const auto &line : _lines)
+        std::size_t height = _lines.size();
+        std::size_t width = height > 0 ? _lines[0].size() : 0;
+        _grid.emplace(width, height);
+        for (std::size_t y = 0; y < height; ++y)
         {
-            _grid->push_back({line.begin(), line.end()});
+            for (std::size_t x = 0; x < _lines[y].size(); ++x)
+            {
+                (*_grid)(x, y) = _lines[y][x];
+            }
         }
     }
     return *_grid;

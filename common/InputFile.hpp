@@ -9,6 +9,8 @@
 #include <utility>
 #include <vector>
 
+#include "Grid.hpp"
+
 class InputFile
 {
 public:
@@ -51,7 +53,7 @@ public:
     /**
      * @brief Returns the input as a character grid (cache is reused across calls)
      */
-    const std::vector<std::vector<char>> &asGrid() const;
+    const common::grid::Grid<char> &asGrid() const;
 
     iterator begin() const noexcept { return _lines.begin(); }
     iterator end() const noexcept { return _lines.end(); }
@@ -69,5 +71,5 @@ private:
     /// @brief Cached integer representation of every non-empty line
     mutable std::optional<std::vector<int64_t>> _integers;
     /// @brief Cached grid representation
-    mutable std::optional<std::vector<std::vector<char>>> _grid;
+    mutable std::optional<common::grid::Grid<char>> _grid;
 };
