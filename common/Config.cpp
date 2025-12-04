@@ -48,6 +48,14 @@ bool isCustomFlag(std::string_view arg)
 {
     return arg.starts_with("--input=") || arg == "--input" ||
            arg.starts_with("--test-dir=") || arg == "--test-dir" ||
+           arg.starts_with("--sample=") || arg.starts_with("--samples=") ||
+           arg == "--sample" || arg == "--samples" ||
+           arg == "--run-samples" || arg == "--samples-only" ||
+           arg == "--sample-only" || arg == "--sample-mode" ||
+           arg == "--sample-part1" || arg == "--sample-part2" ||
+           arg == "--run-input" || arg == "--input-only" ||
+           arg == "--run-puzzle" || arg == "--puzzle" ||
+           arg == "--puzzle-only" ||
            arg == "--skip-part1" || arg == "--skip-part2" ||
            arg == "--only-part1" || arg == "--only-part2" ||
            arg == "--no-color" || arg == "--color";
@@ -213,6 +221,45 @@ RunOptions buildRunOptions(std::string_view dayId,
         else if (arg == "--only-part2")
         {
             options.runPart1 = false;
+        }
+        else if (arg.starts_with("--sample=") || arg.starts_with("--samples="))
+        {
+            options.samplesOnly = true;
+            const auto value = arg.substr(arg.find('=') + 1);
+            if (!value.empty())
+            {
+                std::cerr << "The --sample flag no longer accepts a part value; "
+                             "use --only-part1/--only-part2 instead." << std::endl;
+            }
+        }
+        else if (arg == "--sample" || arg == "--samples" || arg == "--run-samples" ||
+                 arg == "--samples-only" || arg == "--sample-only" || arg == "--sample-mode")
+        {
+            options.samplesOnly = true;
+            if (i + 1 < argc && argv[i + 1][0] != '-')
+            {
+                consumedArgs.push_back(i + 1);
+                std::cerr << "Ignoring value '" << argv[i + 1]
+                          << "' for --sample; use --only-part1/--only-part2 instead." << std::endl;
+                ++i;
+            }
+        }
+        else if (arg == "--sample-part1")
+        {
+            options.samplesOnly = true;
+            options.runPart1 = true;
+            options.runPart2 = false;
+        }
+        else if (arg == "--sample-part2")
+        {
+            options.samplesOnly = true;
+            options.runPart1 = false;
+            options.runPart2 = true;
+        }
+        else if (arg == "--run-input" || arg == "--input-only" ||
+                 arg == "--run-puzzle" || arg == "--puzzle" || arg == "--puzzle-only")
+        {
+            options.inputOnly = true;
         }
         else if (arg == "--no-color")
         {

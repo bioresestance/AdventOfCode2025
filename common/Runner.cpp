@@ -36,40 +36,81 @@ void printResult(std::string_view label,
               << " (" << durationSeconds << "s)" << std::endl;
 }
 
-} // namespace
-
-int runDayWithAdapters(int argc,
-                       char **argv,
-                       std::string_view dayId,
-                       std::string_view sourcePath,
-                       std::function<std::string(const InputFile &)> part1,
-                       std::function<std::string(const InputFile &)> part2)
+int runSampleCases(tests::Part part,
+                   const std::function<std::string(const InputFile &)> &solver)
 {
-    RunOptions options = buildRunOptions(dayId, sourcePath, argc, argv);
-    tests::setTestsRoot(options.testsPath);
-    tests::setEnabledParts(options.runPart1, options.runPart2);
-
-    ::testing::InitGoogleTest(&argc, argv);
-    const bool listingTests = ::testing::GTEST_FLAG(list_tests);
-    const int testResult = RUN_ALL_TESTS();
-    if (listingTests)
+    const auto &cases = tests::cases(part);
+    const int partNumber = part == tests::Part::One ? 1 : 2;
+    if (cases.empty())
     {
-        // CTest invokes gtest binaries with --gtest_list_tests during discovery;
-        // bail out early so the actual puzzle execution does not run at build time.
-        return testResult;
-    }
-    if (testResult != 0)
-    {
-        return testResult;
+        std::cout << "No sample cases found for part " << partNumber << '.' << std::endl;
+        return 0;
     }
 
-    InputFile input(options.inputPath.string());
+    std::cout << "Running sample cases for part " << partNumber << ':' << std::endl;
+    int caseIndex = 1;
+    for (const auto &testCase : cases)
+    {
+        const auto input = tests::makeInput(testCase);
+        const auto result = solver(input);
+        std::cout << "  [" << caseIndex++ << "] " << testCase.name << ": " << result;
+        if (!testCase.expected.empty())
+        {
+            std::cout << " (expected " << testCase.expected;
+            if (result == testCase.expected)
+            {
+                std::cout << ", match";
+            }
+            else
+            {
+                std::cout << ", mismatch";
+            }
+            std::cout << ')';
+        }
+        std::cout << std::endl;
+    }
+    return 0;
+}
 
+int runSampleMode(const RunOptions &options,
+                  const std::function<std::string(const InputFile &)> &part1,
+                  const std::function<std::string(const InputFile &)> &part2)
+{
+    bool ranPart = false;
+    if (options.runPart1)
+    {
+        ranPart = true;
+        if (int rc = runSampleCases(tests::Part::One, part1); rc != 0)
+        {
+            return rc;
+        }
+    }
+    if (options.runPart2)
+    {
+        ranPart = true;
+        if (int rc = runSampleCases(tests::Part::Two, part2); rc != 0)
+        {
+            return rc;
+        }
+    }
+    if (!ranPart)
+    {
+        std::cout << "All parts disabled; nothing to run." << std::endl;
+    }
+    return 0;
+}
+
+int runPuzzleMode(const RunOptions &options,
+                  const std::function<std::string(const InputFile &)> &part1,
+                  const std::function<std::string(const InputFile &)> &part2)
+{
     if (!options.runPart1 && !options.runPart2)
     {
         std::cout << "All parts disabled; nothing to run." << std::endl;
         return 0;
     }
+
+    InputFile input(options.inputPath.string());
 
     if (options.runPart1)
     {
@@ -90,6 +131,53 @@ int runDayWithAdapters(int argc,
     }
 
     return 0;
+}
+
+} // namespace
+
+int runDayWithAdapters(int argc,
+                       char **argv,
+                       std::string_view dayId,
+                       std::string_view sourcePath,
+                       std::function<std::string(const InputFile &)> part1,
+                       std::function<std::string(const InputFile &)> part2)
+{
+    RunOptions options = buildRunOptions(dayId, sourcePath, argc, argv);
+    tests::setTestsRoot(options.testsPath);
+
+    if (options.samplesOnly && options.inputOnly)
+    {
+        std::cerr << "Cannot combine --sample and --run-input modes." << std::endl;
+        return 1;
+    }
+
+    tests::setEnabledParts(options.runPart1, options.runPart2);
+
+    if (options.samplesOnly)
+    {
+        return runSampleMode(options, part1, part2);
+    }
+
+    if (options.inputOnly)
+    {
+        return runPuzzleMode(options, part1, part2);
+    }
+
+    ::testing::InitGoogleTest(&argc, argv);
+    const bool listingTests = ::testing::GTEST_FLAG(list_tests);
+    const int testResult = RUN_ALL_TESTS();
+    if (listingTests)
+    {
+        // CTest invokes gtest binaries with --gtest_list_tests during discovery;
+        // bail out early so the actual puzzle execution does not run at build time.
+        return testResult;
+    }
+    if (testResult != 0)
+    {
+        return testResult;
+    }
+
+    return runPuzzleMode(options, part1, part2);
 }
 
 } // namespace detail

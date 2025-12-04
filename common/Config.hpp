@@ -11,6 +11,8 @@ struct RunOptions
     bool runPart1 = true;
     bool runPart2 = true;
     bool colorOutput = true;
+    bool samplesOnly = false;
+    bool inputOnly = false;
     std::filesystem::path inputPath;
     std::filesystem::path testsPath;
 };
