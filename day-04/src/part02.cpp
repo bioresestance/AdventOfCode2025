@@ -21,13 +21,15 @@ int64_t handlePart2(const InputFile &input)
             }
 
             const auto neighbors = map.allNeighbors(coord);
-            
+
             int activeCount = 0;
+            // Check all of the neighbours to see how many are rolls.
             for (const auto &cell : neighbors)
             {
                 if (map[cell] == '@')
                 {
-                    ++activeCount;
+                    if (++activeCount >= 4)
+                        break; // Don't need to check remaining neighbors
                 }
             }
 
@@ -39,7 +41,7 @@ int64_t handlePart2(const InputFile &input)
             }
         }
 
-    } while (hadChanges);
+    } while (hadChanges); // Keep removing rolls until we can't remove anymore
 
     return totalRemoved;
 }
