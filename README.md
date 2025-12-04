@@ -19,3 +19,11 @@ Advent Of Code template for use in C++
     - Get your session token using f12 in your browser.
 
 - Each day, run `just new-day xx`, where xx is the day you are doing.
+
+## Useful CLI Flags
+
+- `--input <path>` / `--input=<path>`: override the puzzle input file.
+- `--test-dir <path>` / `--test-dir=<path>`: override the tests directory (sample inputs).
+- `--skip-part1`, `--skip-part2`, `--only-part1`, `--only-part2`: toggle puzzle execution per part.
+- `--sample` / `--samples` / `--run-samples`: run only the sample inputs outside of GoogleTest. Use the part-selection flags above (e.g., `--only-part1`) to choose which parts execute. Shorthands like `--sample-part1` / `--sample-part2` are also available.
+- `--run-input` / `--input-only` / `--puzzle`: skip GoogleTest and run the real puzzle input directly, again respecting the part-selection flags.
