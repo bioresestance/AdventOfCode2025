@@ -14,6 +14,10 @@ constexpr std::string_view kSourcePath = __FILE__;
 namespace {
 void runSampleSuite(common::tests::Part part)
 {
+    if (!common::tests::isPartEnabled(part))
+    {
+        GTEST_SKIP() << "Part disabled by CLI flags.";
+    }
     const auto &cases = common::tests::cases(part);
     if (cases.empty())
     {
