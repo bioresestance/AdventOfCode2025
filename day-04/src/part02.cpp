@@ -6,37 +6,40 @@
 int64_t handlePart2(const InputFile &input)
 {
     auto map = input.asGrid();
-    uint32_t total = 0;
+    int64_t totalRemoved = 0;
 
-    uint32_t change = 0;
+    bool hadChanges = false;
     do
     {
-        change = 0;
-        for (const auto &coord : map.coordinates())
-        {
+        hadChanges = false;
 
+        for (const auto coord : map.coordinates())
+        {
             if (map[coord] != '@')
             {
                 continue;
             }
 
-            const auto &neighbours = map.allNeighbors(coord);
-
-            uint32_t count = 0;
-            for (const auto &cell : neighbours)
+            const auto neighbors = map.allNeighbors(coord);
+            
+            int activeCount = 0;
+            for (const auto &cell : neighbors)
             {
                 if (map[cell] == '@')
                 {
-                    count++;
+                    ++activeCount;
                 }
             }
-            if (count < 4)
+
+            if (activeCount < 4)
             {
                 map[coord] = '.';
-                change++;
-                total++;
+                hadChanges = true;
+                ++totalRemoved;
             }
         }
-    } while (change > 0);
-    return total;
+
+    } while (hadChanges);
+
+    return totalRemoved;
 }
