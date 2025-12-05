@@ -1,0 +1,10 @@
+/**
+ * Day-5 - Part 02
+ */
+#include "include.hpp"
+
+int64_t handlePart2(const InputFile &input) {
+    const auto &lines = input.getLines();
+    (void)lines;
+    return 0;
+}
