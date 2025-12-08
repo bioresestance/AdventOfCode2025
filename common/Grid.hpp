@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <ostream>
 #include <ranges>
 #include <stdexcept>
@@ -180,6 +181,16 @@ namespace common::grid
             return (*this)(static_cast<std::size_t>(coord.x), static_cast<std::size_t>(coord.y));
         }
 
+        T &operator[](std::size_t index)
+        {
+            return m_cells[index];
+        }
+
+        const T &operator[](std::size_t index) const
+        {
+            return m_cells[index];
+        }
+
         std::size_t width() const noexcept { return m_width; }
         std::size_t height() const noexcept { return m_height; }
         std::size_t size() const noexcept { return m_cells.size(); }
@@ -187,6 +198,31 @@ namespace common::grid
         bool contains(Coordinate coord) const noexcept
         {
             return inBounds(coord, m_width, m_height);
+        }
+
+        std::size_t indexOf(Coordinate coord) const
+        {
+            ensureContains(coord);
+            return static_cast<std::size_t>(coord.y) * m_width + static_cast<std::size_t>(coord.x);
+        }
+
+        Coordinate coordinateOf(std::size_t index) const
+        {
+            return {static_cast<int64_t>(index % m_width), static_cast<int64_t>(index / m_width)};
+        }
+
+        std::optional<Coordinate> nextCoordinate(Coordinate coord) const
+        {
+            if (!contains(coord))
+            {
+                return std::nullopt;
+            }
+            const auto index = indexOf(coord) + 1;
+            if (index >= size())
+            {
+                return std::nullopt;
+            }
+            return coordinateOf(index);
         }
 
         CoordinateRange coordinates() const noexcept { return CoordinateRange(m_width, m_height); }
