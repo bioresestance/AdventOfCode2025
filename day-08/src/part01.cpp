@@ -19,12 +19,12 @@ struct BoxPosition
 using BoxPair = std::pair<uint32_t, uint32_t>;
 using BoxPairAndDist = std::pair<BoxPair, uint64_t>;
 
-inline uint64_t distance(BoxPosition pos1, BoxPosition pos2)
+static inline uint64_t distance(BoxPosition pos1, BoxPosition pos2)
 {
     return static_cast<uint64_t>(std::pow(double(pos2.x - pos1.x), 2) + std::pow(double(pos2.y - pos1.y), 2) + std::pow(double(pos2.z - pos1.z), 2));
 }
 
-std::vector<BoxPairAndDist> findAndSortDistances(const std::vector<BoxPosition> &pairs)
+static std::vector<BoxPairAndDist> findAndSortDistances(const std::vector<BoxPosition> &pairs)
 {
     std::vector<BoxPairAndDist> data;
 
@@ -43,7 +43,7 @@ std::vector<BoxPairAndDist> findAndSortDistances(const std::vector<BoxPosition> 
     return data;
 }
 
-uint32_t findParent(std::vector<uint32_t> &parents, uint32_t point)
+static uint32_t findParent(std::vector<uint32_t> &parents, uint32_t point)
 {
     if (parents[point] != point)
     {
@@ -54,7 +54,7 @@ uint32_t findParent(std::vector<uint32_t> &parents, uint32_t point)
     return parents[point];
 }
 
-void unionBoxes(std::vector<uint32_t> &parents, std::vector<uint32_t> &sizes, uint32_t box1, uint32_t box2)
+static void unionBoxes(std::vector<uint32_t> &parents, std::vector<uint32_t> &sizes, uint32_t box1, uint32_t box2)
 {
     auto box1Parent = findParent(parents, box1);
     auto box2Parent = findParent(parents, box2);
