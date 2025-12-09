@@ -1,0 +1,14 @@
+/**
+ * Day-8 - Part 02
+ */
+#include "include.hpp"
+#include <ranges>
+#include <iostream>
+
+using namespace std::ranges;
+
+int64_t handlePart2(const InputFile &input) {
+    const auto &lines = input.getLines();
+    (void)lines;
+    return 0;
+}
