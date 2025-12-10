@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cctype>
 #include <charconv>
+#include <array>
 #include <iterator>
 #include <optional>
 #include <stdexcept>
@@ -142,5 +143,56 @@ std::vector<T> to_vector_of_numbers(std::string_view input, std::optional<char> 
     return numbers;
 }
 
+inline std::string remove_chars(std::string_view input, std::string_view chars)
+{
+    if (chars.empty())
+    {
+        return std::string(input);
+    }
+
+    std::array<bool, 256> lookup{};
+    for (unsigned char c : chars)
+    {
+        lookup[c] = true;
+    }
+
+    std::string result;
+    result.reserve(input.size());
+    for (unsigned char c : input)
+    {
+        if (!lookup[c])
+        {
+            result.push_back(static_cast<char>(c));
+        }
+    }
+    return result;
+}
+
+inline std::string &remove_chars_inplace(std::string &input, std::string_view chars)
+{
+    if (chars.empty())
+    {
+        return input;
+    }
+
+    std::array<bool, 256> lookup{};
+    for (unsigned char c : chars)
+    {
+        lookup[c] = true;
+    }
+
+    input.erase(std::remove_if(input.begin(), input.end(), [&](unsigned char c) { return lookup[c]; }), input.end());
+    return input;
+}
+
+inline std::string remove_char(std::string_view input, char ch)
+{
+    return remove_chars(input, std::string_view(&ch, 1));
+}
+
+inline std::string &remove_char_inplace(std::string &input, char ch)
+{
+    return remove_chars_inplace(input, std::string_view(&ch, 1));
+}
 
 } // namespace common::str

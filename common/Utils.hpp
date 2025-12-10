@@ -7,6 +7,7 @@
 #include "MathUtils.hpp"
 #include "Search.hpp"
 #include "StringUtils.hpp"
+#include "BitsetUtils.hpp"
 
 inline std::vector<std::string> splitString(std::string_view input, const char delimiter)
 {
