@@ -4,6 +4,7 @@
     "C_Cpp.default.cppStandard": "c++23",
     "C_Cpp.default.compilerPath": "/usr/bin/g++",
     "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
     "files.associations": {
         "iostream": "cpp",
         "fstream": "cpp",
@@ -93,6 +94,7 @@
         "stacktrace": "cpp",
         "syncstream": "cpp",
         "typeindex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "eigen":"cpp"
     }
 }

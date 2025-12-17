@@ -15,7 +15,7 @@ struct Machine
     std::vector<uint32_t> joltages;
 };
 
-Machine parseMachineLine(const std::string &line)
+static Machine parseMachineLine(const std::string &line)
 {
     Machine newMachine;
     auto values = common::str::split(line, ' ');
